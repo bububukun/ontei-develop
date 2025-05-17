@@ -156,14 +156,14 @@ const bassNotes = [
     const backBtn = document.getElementById("backBtn");
 
      function sendScore(name, score) {
-      fetch("https://script.google.com/macros/s/AKfycbxyi4i_aTZzzQn4Sw5e9EZMizBNmT54dlEYogeicB9SUQbKUbnKfjmPmbRhzxOE0CXo/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbyrTl0-Ev2C2x4U5YA1tSiH_EZWwzG4m9cthKoC2uABxP4sL_vudGbKw7bDszlc3oiQ/exec", {
             method: "POST",
             body: JSON.stringify({ name: name, score: score }),
       headers: {
         "Content-Type": "application/json"
         }
         })
-        .then(response => response.text())
+        .then(response => response.json())
         .then(result => {
           alert("スコアが送信されました！");
           // 任意: スタート画面に戻るなど
