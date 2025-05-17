@@ -65,7 +65,7 @@
     </select>
   </label>
 
-  <label>数字:
+  <label>度数:
     <select id="numberSelect">
       <option value="1">1</option>
       <option value="2">2</option>
@@ -83,7 +83,7 @@
     </select>
   </label>
 
-  <button id="checkBtn">判定</button>
+  <button id="checkBtn">解答</button>
   <p id="result"></p>
 
   <p id="scoreDisplay"></p>
@@ -122,7 +122,7 @@
 
     let score = 0;
     let combo = 0;
-    const totalTime = 60; // 秒
+    const totalTime = 180; // 秒
     let timeLeft = totalTime;
     let timerId = null;
     let gameActive = true;
