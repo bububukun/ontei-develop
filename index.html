@@ -150,6 +150,7 @@
           data.forEach((entry, index) => {
             rankingDiv.innerHTML += `<p>${index + 1}. ${entry.name} - ${entry.score}点</p>`;
           });
+
         })
         .catch(err => {
           const rankingDiv = document.getElementById('ranking');
