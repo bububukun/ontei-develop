@@ -66,6 +66,27 @@
       cursor: pointer;
       padding: 0.5em 1.2em;
     }
+
+    function sendScore(name, score) {
+  fetch("https://script.google.com/macros/s/AKfycby0iM5ddBjOs8cWjEr-hsDokGHvSe1bKDYXcvYv4vjz3C2j2h5QHEj43ghRaD4VePCk/exec", {
+    method: "POST",
+    body: JSON.stringify({ name: name, score: score }),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+  .then(response => response.text())
+  .then(result => {
+    alert("スコアが送信されました！");
+    // 任意: スタート画面に戻るなど
+    window.location.href = "start.html";
+  })
+  .catch(error => {
+    console.error("送信エラー:", error);
+    alert("スコア送信に失敗しました。");
+  });
+}
+
   </style>
 </head>
 <body>
@@ -312,6 +333,13 @@ function endGame() {
   document.getElementById("checkBtn").disabled = true;
   document.getElementById("numberSelect").disabled = true;
   document.getElementById("qualitySelect").disabled = true;
+  const playerName = prompt("ニックネームを入力してください！(ランキング):");
+  if (playerName) {
+    sendScore(playerName, score); // スコア送信
+  } else {
+    alert("名前が入力されなかったため、スコアは送信されませんでした。");
+  }
+}
 }
 
 backBtn.addEventListener("click", () => {
