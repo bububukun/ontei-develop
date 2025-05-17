@@ -148,7 +148,25 @@
     const wrongSound = document.getElementById("wrongSound");
     const backBtn = document.getElementById("backBtn");
 
-
+    function sendScore(name, score) {
+      fetch("https://script.google.com/macros/s/AKfycbxyi4i_aTZzzQn4Sw5e9EZMizBNmT54dlEYogeicB9SUQbKUbnKfjmPmbRhzxOE0CXo/exec", {
+            method: "POST",
+            body: JSON.stringify({ name: name, score: score }),
+      headers: {
+        "Content-Type": "application/json"
+        }
+        })
+        .then(response => response.text())
+        .then(result => {
+          alert("スコアが送信されました！");
+          // 任意: スタート画面に戻るなど
+            window.location.href = " index.html";
+      })
+      .catch(error => {
+        console.error("送信エラー:", error);
+        alert("スコア送信に失敗しました。");
+      });
+    
     function getSemitone(note) {
       const letter = note.key[0];
       const octave = parseInt(note.key.split("/")[1]);
@@ -329,24 +347,7 @@ backBtn.addEventListener("click", () => {
       window.location.href = "index.html";
     });
 
-function sendScore(name, score) {
-      fetch("https://script.google.com/macros/s/AKfycbxyi4i_aTZzzQn4Sw5e9EZMizBNmT54dlEYogeicB9SUQbKUbnKfjmPmbRhzxOE0CXo/exec", {
-            method: "POST",
-            body: JSON.stringify({ name: name, score: score }),
-      headers: {
-        "Content-Type": "application/json"
-        }
-        })
-        .then(response => response.text())
-        .then(result => {
-          alert("スコアが送信されました！");
-          // 任意: スタート画面に戻るなど
-            window.location.href = " index.html";
-      })
-      .catch(error => {
-        console.error("送信エラー:", error);
-        alert("スコア送信に失敗しました。");
-      });
+
   
 // 初期化
 window.onload = () => {
