@@ -21,7 +21,7 @@
       color: #333;
     }
     button {
-      font-size: 40px;
+      font-size: 24px;
       padding: 0.8em 2em;
       cursor: pointer;
       background-color: #4caf50;
@@ -34,10 +34,58 @@
     button:hover {
       background-color: #45a049;
     }
-    #mode-select {
-      font-size: 40px;
-      margin-bottom: 2em;
-    }
+    .radio-3 {
+  border: none;
+  margin-bottom: 2em;
+}
+
+.radio-3 label {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  position: relative;
+  max-width: 300px;
+  margin-bottom: 0.6em;
+  padding: 0.7em 1em;
+  border: 1px solid #76bb40;
+  border-radius: 5px;
+  background-color: #76bb4026;
+  cursor: pointer;
+  font-size: 24px;
+}
+
+.radio-3 label:has(:checked) {
+  background-color: #76bb40;
+  color: #fff;
+}
+
+.radio-3 label::before,
+.radio-3 label:has(:checked)::after {
+  border-radius: 50%;
+  content: '';
+}
+
+.radio-3 label::before {
+  width: 18px;
+  height: 18px;
+  background-color: #fff;
+  border: 2px solid #76bb40;
+  flex-shrink: 0;
+}
+
+.radio-3 label:has(:checked)::after {
+  position: absolute;
+  top: 50%;
+  left: 1.15em;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background-color: #76bb40;
+}
+
+.radio-3 input {
+  display: none;
+}
     #ranking {
       background: white;
       border-radius: 10px;
@@ -61,9 +109,21 @@
 
   <!-- モード選択 -->
   <div id="mode-select">
-    <label><input type="radio" name="mode" value="treble" checked> ト音記号モード</label><br />
-    <label><input type="radio" name="mode" value="bass"> ヘ音記号モード</label><br />
-    <label><input type="radio" name="mode" value="mix"> ミックスモード</label>
+    <fieldset class="radio-3">
+  <label>
+    <input type="radio" name="mode" value="treble" checked />
+    ト音記号モード
+  </label>
+  <label>
+    <input type="radio" name="mode" value="bass" />
+    ヘ音記号モード
+  </label>
+  <label>
+    <input type="radio" name="mode" value="mix" />
+    ミックスモード
+  </label>
+</fieldset>
+
   </div>
 
   <!-- スタートボタン -->
