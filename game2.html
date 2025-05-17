@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>度数クイズゲーム</title>
+  <title>度数クイズゲーム2</title>
   <script src="https://cdn.jsdelivr.net/npm/vexflow@4.0.3/releases/vexflow-min.js"></script>
   <style>
     body {
@@ -72,7 +72,7 @@
 </head>
 <body>
 
-  <h1>度数クイズゲーム</h1>
+  <h1>度数クイズゲーム2</h1>
   <div id="staff"></div>
 
   <div>
@@ -235,12 +235,12 @@ const bassNotes = [
 
     // ランダムに音を2つ選ぶ
     function pickNotes() {
-  clef = Math.random() < 0.5 ? "treble" : "bass";
-  const notes = (clef === "treble") ? trebleNotes : bassNotes;
-  const idx1 = Math.floor(Math.random() * notes.length);
-  const idx2 = Math.floor(Math.random() * notes.length);
-  return [notes[idx1], notes[idx2]];
-}
+      clef = Math.random() < 0.5 ? "treble" : "bass";
+      const notes = (clef === "treble") ? trebleNotes : bassNotes;
+      const idx1 = Math.floor(Math.random() * notes.length);
+      const idx2 = Math.floor(Math.random() * notes.length);
+      return [notes[idx1], notes[idx2]];
+    }
 
 
     // 五線譜描画
