@@ -235,31 +235,37 @@ const bassNotes = [
 
     // ランダムに音を2つ選ぶ
     function pickNotes() {
-      const params = new URLSearchParams(window.location.search);
-      const mode = params.get('mode'); // 'treble' | 'bass' | 'mix'
+  const params = new URLSearchParams(window.location.search);
+  const mode = params.get('mode'); // 'treble' | 'bass' | 'mix'
 
-      if (mode === 'treble') {
-        clef = 'treble';
-      } else if (mode === 'bass') {
-        clef = 'bass';
-      } else {
-        clef = Math.random() < 0.5 ? 'treble' : 'bass'; // ミックス
-      }
+  let notesPool;
+  if (mode === 'treble') {
+    clef = 'treble';
+    notesPool = trebleNotes;
+  } else if (mode === 'bass') {
+    clef = 'bass';
+    notesPool = bassNotes;
+  }
 
-      let notes, n1, n2, degree;
-      do {
-        clef = Math.random() < 0.5 ? "treble" : "bass";
-        notes = (clef === "treble") ? trebleNotes : bassNotes;
+  let n1, n2, degree;
 
-        const idx1 = Math.floor(Math.random() * notes.length);
-        const idx2 = Math.floor(Math.random() * notes.length);
-        [n1, n2] = [notes[idx1], notes[idx2]];
-        [n1, n2] = orderNotes(n1, n2);
-        degree = calcDegree(n1, n2);
-      } while (degree > 8); // 8度以内のみ許可
-
-      return [n1, n2];
+  do {
+    if (mode === 'mix') {
+      clef = Math.random() < 0.5 ? 'treble' : 'bass';
+      notesPool = clef === 'treble' ? trebleNotes : bassNotes;
     }
+
+    const idx1 = Math.floor(Math.random() * notesPool.length);
+    const idx2 = Math.floor(Math.random() * notesPool.length);
+    [n1, n2] = [notesPool[idx1], notesPool[idx2]];
+    [n1, n2] = orderNotes(n1, n2);
+    degree = calcDegree(n1, n2);
+
+  } while (degree > 8); // 8度以内のみ出題
+
+  return [n1, n2];
+}
+
 
 
 
