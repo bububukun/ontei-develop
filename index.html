@@ -107,7 +107,7 @@
   </style>
 </head>
 <body>
-  <h1>音程クイズ！開発用</h1>
+  <h1>音程クイズ！開発用v8</h1>
 
   <!-- モード選択 -->
   <div id="mode-select">
@@ -119,6 +119,10 @@
   <label>
     <input type="radio" name="mode" value="bass" />
     ヘ音記号モード
+  </label>
+  <label>
+    <input type="radio" name="mode" value="c_clef" />
+　ハ音記号モード
   </label>
   <label>
     <input type="radio" name="mode" value="mix" />
@@ -139,7 +143,7 @@
   <script>
     document.getElementById('startBtn').addEventListener('click', () => {
       const selectedMode = document.querySelector('input[name="mode"]:checked').value;
-      window.location.href = `game2.html?mode=${selectedMode}`;
+      window.location.href = `game3.html?mode=${selectedMode}`;
     });
 
     function fetchRanking() {
