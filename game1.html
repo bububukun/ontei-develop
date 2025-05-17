@@ -132,6 +132,7 @@
       { key: "a#/4", accidental: "#" },
       { key: "b/4", accidental: null },
       { key: "c/5", accidental: null },
+      { key: "c#/5", accidental: "#" },
     ];
 
     let note1, note2;
@@ -189,14 +190,16 @@
       const letter2 = n2.key[0];
       const octave1 = parseInt(n1.key.split("/")[1]);
       const octave2 = parseInt(n2.key.split("/")[1]);
-      // 音名の順序差 + オクターブ差×7 + 1
-      return ((noteOrder.indexOf(letter2) - noteOrder.indexOf(letter1) + 7) % 7) + 1 + (octave2 - octave1) * 7;
+      let diff = noteOrder.indexOf(letter2) - noteOrder.indexOf(letter1);
+      if (diff < 0) diff += 7;
+      return (octave2 - octave1) * 7 + diff + 1;
     }
+
 
     // 度数の理想半音数
     const idealSemitones = {
       1: 0, 2: 2, 3: 4, 4: 5, 5: 7, 6: 9, 7: 11,
-      8: 12, 9: 14, 10: 16, 11: 17, 12: 19, 13: 21
+      8: 12, 9: 14, 10: 16, 11: 17, 12: 19, 13: 21, 
     };
 
     // 度数の修飾語判定（完全・長・短・増・減・重増・重減）
