@@ -333,8 +333,7 @@ function endGame() {
   document.getElementById("checkBtn").disabled = true;
   document.getElementById("numberSelect").disabled = true;
   document.getElementById("qualitySelect").disabled = true;
-  
-const playerName = prompt("ニックネームを入力してください！(ランキング):");
+  const playerName = prompt("ニックネームを入力してください！(ランキング):");
   if (playerName) {
     sendScore(playerName, score); // スコア送信
   } else {
