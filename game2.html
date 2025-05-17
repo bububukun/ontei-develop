@@ -253,11 +253,11 @@ const bassNotes = [
       context.clearRect(0, 0, 320, 180);
 
       stave = new Stave(10, 40, 300);
-      stave.addClef("clef").setContext(context).draw();
+      stave.addClef(clef).setContext(context).draw();
 
       const staveNotes = [
-        new StaveNote({ clef: "clef", keys: [note1.key], duration: "w" }),
-        new StaveNote({ clef: "clef", keys: [note2.key], duration: "w" })
+        new StaveNote({ clef: clef, keys: [note1.key], duration: "w" }),
+        new StaveNote({ clef: clef, keys: [note2.key], duration: "w" })
       ];
 
       if (note1.accidental) staveNotes[0].addAccidental(0, new Accidental(note1.accidental));
