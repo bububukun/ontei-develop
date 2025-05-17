@@ -160,7 +160,7 @@
         .then(result => {
           alert("スコアが送信されました！");
           // 任意: スタート画面に戻るなど
-            window.location.href = " index.html";
+            window.location.href = "index.html";
       })
       .catch(error => {
         console.error("送信エラー:", error);
@@ -342,7 +342,6 @@ function endGame() {
   } else {
     alert("名前が入力されなかったため、スコアは送信されませんでした。");
   }
-}
 }
 
 backBtn.addEventListener("click", () => {
