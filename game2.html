@@ -118,23 +118,31 @@
     const { Renderer, Stave, StaveNote, Formatter, Accidental } = Vex.Flow;
 
     // 音符候補（4オクターブ）
-    const notesList = [
-      { key: "c/4", accidental: null },
-      { key: "c#/4", accidental: "#" },
-      { key: "d/4", accidental: null },
-      { key: "d#/4", accidental: "#" },
-      { key: "e/4", accidental: null },
-      { key: "f/4", accidental: null },
-      { key: "f#/4", accidental: "#" },
-      { key: "g/4", accidental: null },
-      { key: "g#/4", accidental: "#" },
-      { key: "a/4", accidental: null },
-      { key: "a#/4", accidental: "#" },
-      { key: "b/4", accidental: null },
-     // { key: "c/5", accidental: null },
-     // { key: "c#/5", accidental: "#" },
-    ];
+    const trebleNotes = [
+  { key: "c/4", accidental: null }, { key: "c#/4", accidental: "#" },
+  { key: "d/4", accidental: null }, { key: "d#/4", accidental: "#" },
+  { key: "e/4", accidental: null }, { key: "f/4", accidental: null },
+  { key: "f#/4", accidental: "#" }, { key: "g/4", accidental: null },
+  { key: "g#/4", accidental: "#" }, { key: "a/4", accidental: null },
+  { key: "a#/4", accidental: "#" }, { key: "b/4", accidental: null },
+  { key: "c/5", accidental: null }, { key: "c#/5", accidental: "#" },
+  { key: "d/5", accidental: null }, { key: "e/5", accidental: null },
+  { key: "f/5", accidental: null }, { key: "g/5", accidental: null },
+];
 
+const bassNotes = [
+  { key: "c/2", accidental: null }, { key: "c#/2", accidental: "#" },
+  { key: "d/2", accidental: null }, { key: "e/2", accidental: null },
+  { key: "f/2", accidental: null }, { key: "g/2", accidental: null },
+  { key: "a/2", accidental: null }, { key: "b/2", accidental: null },
+  { key: "c/3", accidental: null }, { key: "d/3", accidental: null },
+  { key: "e/3", accidental: null }, { key: "f/3", accidental: null },
+  { key: "g/3", accidental: null }, { key: "a/3", accidental: null },
+  { key: "b/3", accidental: null }
+];
+
+
+    let clef = "treble"; // "treble" か "bass" を問題ごとにランダムに決定
     let note1, note2;
     let renderer, context, stave;
     let score = 0;
@@ -227,10 +235,13 @@
 
     // ランダムに音を2つ選ぶ
     function pickNotes() {
-      const idx1 = Math.floor(Math.random() * notesList.length);
-      const idx2 = Math.floor(Math.random() * notesList.length);
-      return [notesList[idx1], notesList[idx2]];
-    }
+  clef = Math.random() < 0.5 ? "treble" : "bass";
+  const notes = (clef === "treble") ? trebleNotes : bassNotes;
+  const idx1 = Math.floor(Math.random() * notes.length);
+  const idx2 = Math.floor(Math.random() * notes.length);
+  return [notes[idx1], notes[idx2]];
+}
+
 
     // 五線譜描画
     function renderStaff() {
@@ -242,11 +253,11 @@
       context.clearRect(0, 0, 320, 180);
 
       stave = new Stave(10, 40, 300);
-      stave.addClef("treble").setContext(context).draw();
+      stave.addClef("clef").setContext(context).draw();
 
       const staveNotes = [
-        new StaveNote({ clef: "treble", keys: [note1.key], duration: "w" }),
-        new StaveNote({ clef: "treble", keys: [note2.key], duration: "w" })
+        new StaveNote({ clef: "clef", keys: [note1.key], duration: "w" }),
+        new StaveNote({ clef: "clef", keys: [note2.key], duration: "w" })
       ];
 
       if (note1.accidental) staveNotes[0].addAccidental(0, new Accidental(note1.accidental));
