@@ -235,6 +235,17 @@ const bassNotes = [
 
     // ランダムに音を2つ選ぶ
     function pickNotes() {
+      const params = new URLSearchParams(window.location.search);
+      const mode = params.get('mode'); // 'treble' | 'bass' | 'mix'
+
+      if (mode === 'treble') {
+        clef = 'treble';
+      } else if (mode === 'bass') {
+        clef = 'bass';
+      } else {
+        clef = Math.random() < 0.5 ? 'treble' : 'bass'; // ミックス
+      }
+
       let notes, n1, n2, degree;
       do {
         clef = Math.random() < 0.5 ? "treble" : "bass";
