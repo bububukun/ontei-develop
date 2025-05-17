@@ -142,7 +142,7 @@
     });
 
     function fetchRanking() {
-      fetch('https://script.google.com/macros/s/AKfycbxyi4i_aTZzzQn4Sw5e9EZMizBNmT54dlEYogeicB9SUQbKUbnKfjmPmbRhzxOE0CXo/exec')
+      fetch('https://script.google.com/macros/s/AKfycbyrTl0-Ev2C2x4U5YA1tSiH_EZWwzG4m9cthKoC2uABxP4sL_vudGbKw7bDszlc3oiQ/exec')
         .then(response => response.json())
         .then(data => {
           const rankingDiv = document.getElementById('ranking');
@@ -150,7 +150,6 @@
           data.forEach((entry, index) => {
             rankingDiv.innerHTML += `<p>${index + 1}. ${entry.name} - ${entry.score}点</p>`;
           });
-
         })
         .catch(err => {
           const rankingDiv = document.getElementById('ranking');
