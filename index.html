@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>v6度数クイズ開発用 - スタート画面</title>
+  <style>
+    /* 既存スタイルは保持 */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: sans-serif;
+      background: #f0f0f0;
+      flex-direction: column;
+      text-align: center;
+    }
+    h1 {
+      font-size: 48px;
+      margin-bottom: 1em;
+      color: #333;
+    }
+    button {
+      font-size: 24px;
+      padding: 0.8em 2em;
+      cursor: pointer;
+      background-color: #4caf50;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      transition: background-color 0.3s ease;
+      margin-top: 1em;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+
+    /* ▼ 追加フォームのスタイル */
+    #login-box, #register-box {
+      margin-bottom: 1em;
+    }
+
+    input[type="text"], input[type="password"] {
+      padding: 0.5em;
+      font-size: 20px;
+      margin: 0.3em;
+      width: 250px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .radio-3 {
+      border: none;
+      margin-bottom: 2em;
+    }
+
+    .radio-3 label {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      position: relative;
+      max-width: 300px;
+      margin-bottom: 0.6em;
+      padding: 0.7em 1em;
+      border: 1px solid #76bb40;
+      border-radius: 5px;
+      background-color: #76bb4026;
+      cursor: pointer;
+      font-size: 24px;
+    }
+
+    .radio-3 label:has(:checked) {
+      background-color: #76bb40;
+      color: #fff;
+    }
+
+    .radio-3 label::before,
+    .radio-3 label:has(:checked)::after {
+      border-radius: 50%;
+      content: '';
+    }
+
+    .radio-3 label::before {
+      width: 18px;
+      height: 18px;
+      background-color: #fff;
+      border: 2px solid #76bb40;
+      flex-shrink: 0;
+    }
+
+    .radio-3 label:has(:checked)::after {
+      position: absolute;
+      top: 50%;
+      left: 1.15em;
+      transform: translate(-50%, -50%);
+      width: 8px;
+      height: 8px;
+      background-color: #76bb40;
+    }
+
+    .radio-3 input {
+      display: none;
+    }
+
+    #ranking {
+      margin-top: 2em;
+      background: white;
+      border-radius: 10px;
+      padding: 1em 2em;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    #ranking h2 {
+      font-size: 28px;
+      margin-bottom: 0.5em;
+    }
+
+    #ranking p {
+      font-size: 20px;
+      margin: 0.3em 0;
+    }
+
+  </style>
+</head>
+<body>
+  <h1>音程クイズ！開発用</h1>
+
+  <!-- ▼ ログインフォーム -->
+  <div id="login-box">
+    <input type="text" id="username" placeholder="ユーザー名" />
+    <br />
+    <input type="password" id="password" placeholder="パスワード" />
+    <br />
+    <button onclick="login()">ログイン</button>
+  </div>
+
+  <!-- ▼ 新規登録フォーム -->
+  <div id="register-box">
+    <input type="text" id="new-username" placeholder="新規ユーザー名" />
+    <br />
+    <input type="password" id="new-password" placeholder="新規パスワード" />
+    <br />
+    <button onclick="register()">新規登録</button>
+  </div>
+
+  <!-- モード選択 -->
+  <div id="mode-select">
+    <fieldset class="radio-3">
+      <label>
+        <input type="radio" name="mode" value="treble" checked />
+        ト音記号モード
+      </label>
+      <label>
+        <input type="radio" name="mode" value="bass" />
+        ヘ音記号モード
+      </label>
+      <label>
+        <input type="radio" name="mode" value="mix" />
+        ミックスモード
+      </label>
+    </fieldset>
+  </div>
+
+  <!-- スタートボタン（初期状態は無効） -->
+  <button id="startBtn" disabled>ゲームスタート</button>
+
+  <div id="ranking">
+    <h2>ランキング(開発中)</h2>
+    <p>読み込み中...</p>
+  </div>
+
+  <script>
+    document.getElementById('startBtn').addEventListener('click', () => {
+      const selectedMode = document.querySelector('input[name="mode"]:checked').value;
+      const username = localStorage.getItem("username");
+      window.location.href = `game2.html?mode=${selectedMode}&username=${encodeURIComponent(username)}`;
+    });
+
+    function fetchRanking() {
+      fetch('https://script.google.com/macros/s/AKfycbzT7myLC08veMzB9_ca_ufZTY-7k0_ESwH6800o8KGxCLKbi7ow7VkpL7XKbFn_LWI3Ww/exec')
+        .then(response => response.json())
+        .then(data => {
+          const rankingDiv = document.getElementById('ranking');
+          rankingDiv.innerHTML = '<h2>ランキング</h2>';
+          data.forEach((entry, index) => {
+            rankingDiv.innerHTML += `<p>${index + 1}. ${entry.name} - ${entry.score}点</p>`;
+          });
+        })
+        .catch(err => {
+          const rankingDiv = document.getElementById('ranking');
+          rankingDiv.innerHTML = '<h2>ランキング(開発中)</h2><p>取得に失敗しました。</p>';
+          console.error('ランキング取得エラー:', err);
+        });
+    }
+
+    // ▼ ログイン処理
+    async function login() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      const res = await fetch("https://script.google.com/macros/s/AKfycbzT7myLC08veMzB9_ca_ufZTY-7k0_ESwH6800o8KGxCLKbi7ow7VkpL7XKbFn_LWI3Ww/exec", {
+        method: "POST",
+        body: JSON.stringify({ type: "login", username, password }),
+      });
+      const result = await res.json();
+
+      if (result.success) {
+        localStorage.setItem("username", username);
+        alert("ログイン成功！");
+        document.getElementById("startBtn").disabled = false;
+      } else {
+        alert("ログイン失敗：ユーザー名またはパスワードが違います。");
+      }
+    }
+
+    // ▼ 新規登録処理
+    async function register() {
+      const username = document.getElementById("new-username").value;
+      const password = document.getElementById("new-password").value;
+
+      const res = await fetch("https://script.google.com/macros/s/AKfycbzT7myLC08veMzB9_ca_ufZTY-7k0_ESwH6800o8KGxCLKbi7ow7VkpL7XKbFn_LWI3Ww/exec", {
+        method: "POST",
+        body: JSON.stringify({ type: "register", username, password }),
+      });
+      const result = await res.json();
+
+      if (result.success) {
+        alert("登録成功！ログインしてください。");
+      } else {
+        alert("登録失敗：" + result.message);
+      }
+    }
+
+    window.onload = () => {
+      fetchRanking();
+
+      // ▼ 既にログイン済みなら「スタートボタン」有効化
+      if (localStorage.getItem("username")) {
+        document.getElementById("startBtn").disabled = false;
+      }
+    };
+  </script>
+</body>
+</html>
