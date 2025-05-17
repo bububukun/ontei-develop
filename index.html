@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>度数クイズ</title>
+  <script src="https://cdn.jsdelivr.net/npm/vexflow@4.0.3/releases/vexflow-min.js"></script>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      flex-direction: column;
+      font-family: sans-serif;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 0.5em;
+    }
+
+    #staff {
+      width: 300px;
+      height: 150px;
+      margin-bottom: 1em;
+    }
+
+    p, select, button {
+      font-size: 24px;
+      margin: 0.5em;
+    }
+
+    select {
+      padding: 0.3em;
+    }
+
+    button {
+      padding: 0.3em 1em;
+    }
+  </style>
+</head>
+<body>
+  <h1>度数クイズ</h1>
+  <div id="staff"></div>
+  <p>この2音の度数は？</p>
+
+  <label>修飾語：
+    <select id="qualitySelect">
+      <option value="完全">完全</option>
+      <option value="長">長</option>
+      <option value="短">短</option>
+      <option value="増">増</option>
+      <option value="減">減</option>
+      <option value="重増">重増</option>
+      <option value="重減">重減</option>
+    </select>
+  </label>
+
+  <label>数字：
+    <select id="numberSelect">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+      <option value="11">11</option>
+      <option value="12">12</option>
+      <option value="13">13</option>
+    </select>
+  </label>
+
+  <button id="checkBtn">判定</button>
+  <p id="result"></p>
+
+  <audio id="correctSound" src="correct.mp3" preload="auto"></audio>
+  <audio id="wrongSound" src="wrong.mp3" preload="auto"></audio>
+
+  <script>
+    const { Renderer, Stave, StaveNote, Formatter, Accidental } = Vex.Flow;
+    let note1, note2;
+
+    const notes = [
+      { key: "c/4", accidental: null },
+      { key: "c#/4", accidental: "#" },
+      { key: "db/4", accidental: "b" },
+      { key: "d/4", accidental: null },
+      { key: "d#/4", accidental: "#" },
+      { key: "eb/4", accidental: "b" },
+      { key: "e/4", accidental: null },
+      { key: "f/4", accidental: null },
+      { key: "f#/4", accidental: "#" },
+      { key: "gb/4", accidental: "b" },
+      { key: "g/4", accidental: null },
+      { key: "g#/4", accidental: "#" },
+      { key: "ab/4", accidental: "b" },
+      { key: "a/4", accidental: null },
+      { key: "a#/4", accidental: "#" },
+      { key: "bb/4", accidental: "b" },
+      { key: "b/4", accidental: null }
+    ];
+
+    const correctSound = document.getElementById("correctSound");
+    const wrongSound = document.getElementById("wrongSound");
+
+    function renderQuestion() {
+      const renderer = new Renderer(document.getElementById("staff"), Renderer.Backends.SVG);
+      renderer.resize(300, 150);
+      const context = renderer.getContext();
+      context.clearRect(0, 0, 300, 150);
+      const stave = new Stave(10, 40, 250);
+      stave.addClef("treble").setContext(context).draw();
+
+      const index1 = Math.floor(Math.random() * notes.length);
+      const index2 = Math.floor(Math.random() * notes.length);
+      note1 = notes[index1];
+      note2 = notes[index2];
+
+      const staveNotes = [
+        new StaveNote({ clef: "treble", keys: [note1.key], duration: "q" }),
+        new StaveNote({ clef: "treble", keys: [note2.key], duration: "q" })
+      ];
+
+      if (note1.accidental) {
+        staveNotes[0].addAccidental(0, new Accidental(note1.accidental));
+      }
+      if (note2.accidental) {
+        staveNotes[1].addAccidental(0, new Accidental(note2.accidental));
+      }
+
+      Formatter.FormatAndDraw(context, stave, staveNotes);
+    }
+
+    function getMidi(note) {
+      const letter = note.key[0];
+      const octave = parseInt(note.key.split("/")[1]);
+      const letterToSemitone = { c: 0, d: 2, e: 4, f: 5, g: 7, a: 9, b: 11 };
+      let semitone = letterToSemitone[letter.toLowerCase()] + octave * 12;
+
+      if (note.accidental === "#") semitone += 1;
+      if (note.accidental === "##") semitone += 2;
+      if (note.accidental === "b") semitone -= 1;
+      if (note.accidental === "bb") semitone -= 2;
+
+      return semitone;
+    }
+
+    function getIntervalData(n1, n2) {
+      const midi1 = getMidi(n1);
+      const midi2 = getMidi(n2);
+
+      // 上下を強制的に並び替え（下から上へ）
+      let lowNote = midi1 <= midi2 ? n1 : n2;
+      let highNote = midi1 <= midi2 ? n2 : n1;
+
+      const semitoneLow = getMidi(lowNote);
+      const semitoneHigh = getMidi(highNote);
+      const semitoneDiff = semitoneHigh - semitoneLow;
+
+      const noteOrder = ["c", "d", "e", "f", "g", "a", "b"];
+      const letterLow = lowNote.key[0].toLowerCase();
+      const letterHigh = highNote.key[0].toLowerCase();
+      const degreeDiff = (noteOrder.indexOf(letterHigh) - noteOrder.indexOf(letterLow) + 7) % 7 + 1;
+      const octaveDiff = parseInt(highNote.key.split("/")[1]) - parseInt(lowNote.key.split("/")[1]);
+      const degree = degreeDiff + octaveDiff * 7;
+
+      const idealSemitone = {
+        1: 0, 2: 2, 3: 4, 4: 5, 5: 7, 6: 9, 7: 11,
+        8: 12, 9: 14, 10: 16, 11: 17, 12: 19, 13: 21
+      }[degree] ?? 0;
+
+      const diff = semitoneDiff - idealSemitone;
+      const isPerfect = [1, 4, 5, 8].includes(degree);
+
+      let quality = "不明";
+      if (isPerfect) {
+        if (diff === 0) quality = "完全";
+        else if (diff === 1) quality = "増";
+        else if (diff === 2) quality = "重増";
+        else if (diff === -1) quality = "減";
+        else if (diff === -2) quality = "重減";
+      } else {
+        if (diff === 0) quality = "長";
+        else if (diff === -1) quality = "短";
+        else if (diff === 1) quality = "増";
+        else if (diff === 2) quality = "重増";
+        else if (diff === -2) quality = "重減";
+        else if (diff === -3) quality = "減";
+      }
+
+      return { quality, degree };
+    }
+
+    document.getElementById("checkBtn").onclick = () => {
+      const qualityInput = document.getElementById("qualitySelect").value;
+      const numberInput = parseInt(document.getElementById("numberSelect").value);
+      const result = document.getElementById("result");
+
+      const { quality, degree } = getIntervalData(note1, note2);
+
+      if (quality === qualityInput && degree === numberInput) {
+        result.textContent = `正解！（${quality}${degree}度）`;
+        correctSound.play();
+      } else {
+        result.textContent = `不正解。正解は ${quality}${degree}度 です。`;
+        wrongSound.play();
+      }
+
+      setTimeout(() => {
+        result.textContent = "";
+        document.getElementById("staff").innerHTML = "";
+        renderQuestion();
+      }, 2000);
+    };
+
+    window.onload = renderQuestion;
+  </script>
+</body>
+</html>
