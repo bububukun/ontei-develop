@@ -173,6 +173,14 @@
   </div>
 
   <script>
+    async function hashPassword(password) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
     document.getElementById('startBtn').addEventListener('click', () => {
       const selectedMode = document.querySelector('input[name="mode"]:checked').value;
       const username = localStorage.getItem("username");
@@ -196,43 +204,45 @@
         });
     }
 
-    // ▼ ログイン処理
+
     async function login() {
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+  const passwordHash = await hashPassword(password);  // ハッシュ化！
 
-      const res = await fetch("https://script.google.com/macros/s/AKfycbzT7myLC08veMzB9_ca_ufZTY-7k0_ESwH6800o8KGxCLKbi7ow7VkpL7XKbFn_LWI3Ww/exec", {
-        method: "POST",
-        body: JSON.stringify({ type: "login", username, password }),
-      });
-      const result = await res.json();
+  const res = await fetch("https://script.google.com/macros/s/AKfycbzT7myLC08veMzB9_ca_ufZTY-7k0_ESwH6800o8KGxCLKbi7ow7VkpL7XKbFn_LWI3Ww/exec", {
+    method: "POST",
+    body: JSON.stringify({ type: "login", username, password: passwordHash }),
+  });
+  const result = await res.json();
 
-      if (result.success) {
-        localStorage.setItem("username", username);
-        alert("ログイン成功！");
-        document.getElementById("startBtn").disabled = false;
-      } else {
-        alert("ログイン失敗：ユーザー名またはパスワードが違います。");
-      }
-    }
+  if (result.success) {
+    localStorage.setItem("username", username);
+    alert("ログイン成功！");
+    document.getElementById("startBtn").disabled = false;
+  } else {
+    alert("ログイン失敗：ユーザー名またはパスワードが違います。");
+  }
+}
 
-    // ▼ 新規登録処理
-    async function register() {
-      const username = document.getElementById("new-username").value;
-      const password = document.getElementById("new-password").value;
+async function register() {
+  const username = document.getElementById("new-username").value;
+  const password = document.getElementById("new-password").value;
+  const passwordHash = await hashPassword(password);  // ハッシュ化！
 
-      const res = await fetch("https://script.google.com/macros/s/AKfycbzT7myLC08veMzB9_ca_ufZTY-7k0_ESwH6800o8KGxCLKbi7ow7VkpL7XKbFn_LWI3Ww/exec", {
-        method: "POST",
-        body: JSON.stringify({ type: "register", username, password }),
-      });
-      const result = await res.json();
+  const res = await fetch("https://script.google.com/macros/s/AKfycbzT7myLC08veMzB9_ca_ufZTY-7k0_ESwH6800o8KGxCLKbi7ow7VkpL7XKbFn_LWI3Ww/exec", {
+    method: "POST",
+    body: JSON.stringify({ type: "register", username, password: passwordHash }),
+  });
+  const result = await res.json();
 
-      if (result.success) {
-        alert("登録成功！ログインしてください。");
-      } else {
-        alert("登録失敗：" + result.message);
-      }
-    }
+  if (result.success) {
+    alert("登録成功！ログインしてください。");
+  } else {
+    alert("登録失敗：" + result.message);
+  }
+}
+
 
     window.onload = () => {
       fetchRanking();
