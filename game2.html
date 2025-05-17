@@ -235,12 +235,21 @@ const bassNotes = [
 
     // ランダムに音を2つ選ぶ
     function pickNotes() {
-      clef = Math.random() < 0.5 ? "treble" : "bass";
-      const notes = (clef === "treble") ? trebleNotes : bassNotes;
-      const idx1 = Math.floor(Math.random() * notes.length);
-      const idx2 = Math.floor(Math.random() * notes.length);
-      return [notes[idx1], notes[idx2]];
+      let notes, n1, n2, degree;
+      do {
+        clef = Math.random() < 0.5 ? "treble" : "bass";
+        notes = (clef === "treble") ? trebleNotes : bassNotes;
+
+        const idx1 = Math.floor(Math.random() * notes.length);
+        const idx2 = Math.floor(Math.random() * notes.length);
+        [n1, n2] = [notes[idx1], notes[idx2]];
+        [n1, n2] = orderNotes(n1, n2);
+        degree = calcDegree(n1, n2);
+      } while (degree > 8); // 8度以内のみ許可
+
+      return [n1, n2];
     }
+
 
 
     // 五線譜描画
