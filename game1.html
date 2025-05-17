@@ -74,25 +74,6 @@
   <div id="staff"></div>
 
   <div>
-    <label>数字:
-      <select id="numberSelect">
-        <!-- 1〜13度まで -->
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-        <option value="9">9</option>
-        <option value="10">10</option>
-        <option value="11">11</option>
-        <option value="12">12</option>
-        <option value="13">13</option>
-      </select>
-    </label>
-
     <label>修飾語:
       <select id="qualitySelect">
         <option value="完全">完全</option>
@@ -105,12 +86,26 @@
       </select>
     </label>
 
+    <label>数字:
+      <select id="numberSelect">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+      </select>
+    </label>
+
+
     <button id="checkBtn">解答</button>
   </div>
 
   <div id="result"></div>
   <div id="scoreboard">スコア: 0 | コンボ: 0</div>
-  <div id="time">残り時間: 60秒</div>
+  <div id="time">残り時間: 180秒</div>
 
   <button id="backBtn">スタート画面に戻る</button>
   
@@ -135,24 +130,13 @@
       { key: "a#/4", accidental: "#" },
       { key: "b/4", accidental: null },
       { key: "c/5", accidental: null },
-      { key: "c#/5", accidental: "#" },
-      { key: "d/5", accidental: null },
-      { key: "d#/5", accidental: "#" },
-      { key: "e/5", accidental: null },
-      { key: "f/5", accidental: null },
-      { key: "f#/5", accidental: "#" },
-      { key: "g/5", accidental: null },
-      { key: "g#/5", accidental: "#" },
-      { key: "a/5", accidental: null },
-      { key: "a#/5", accidental: "#" },
-      { key: "b/5", accidental: null }
     ];
 
     let note1, note2;
     let renderer, context, stave;
     let score = 0;
     let combo = 0;
-    let totalTime = 60; // 制限時間（秒）
+    let totalTime = 180; // 制限時間（秒）
     let intervalId;
     let startTime = 0; // 問題出題時刻（ミリ秒）
 
