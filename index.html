@@ -103,6 +103,32 @@
       font-size: 20px;
       margin: 0.3em 0;
     }
+    #loginForm, #userDisplay {
+  margin-bottom: 1em;
+}
+
+#loginForm input {
+  font-size: 16px;
+  padding: 0.5em;
+  margin: 0.3em;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+#loginBtn {
+  font-size: 18px;
+  padding: 0.5em 1.2em;
+  cursor: pointer;
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+#loginBtn:hover {
+  background-color: #1976D2;
+}
+
   </style>
 </head>
 <body>
@@ -157,6 +183,69 @@
           console.error('ランキング取得エラー:', err);
         });
     }
+
+    <!-- ログインフォーム -->
+<div id="loginForm">
+  <h3>ログイン</h3>
+  <input type="text" id="username" placeholder="ユーザー名" required>
+  <input type="password" id="password" placeholder="パスワード" required>
+  <button id="loginBtn">ログイン</button>
+</div>
+
+<!-- ユーザー名表示（ログイン後） -->
+<div id="userDisplay" style="display: none;">
+  <p>こんにちは、<span id="currentUser"></span>さん</p>
+</div>
+
+
+    // ログイン処理
+document.getElementById("loginBtn").addEventListener("click", () => {
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  if (!username || !password) {
+    alert("ユーザー名とパスワードを入力してください");
+    return;
+  }
+
+  // パスワードは固定でも良い（例：1234）
+  if (password !== "1234") {
+    alert("パスワードが間違っています");
+    return;
+  }
+
+  localStorage.setItem("quizUser", username);
+  updateLoginUI();
+});
+
+// UI切り替え
+function updateLoginUI() {
+  const user = localStorage.getItem("quizUser");
+  if (user) {
+    document.getElementById("loginForm").style.display = "none";
+    document.getElementById("userDisplay").style.display = "block";
+    document.getElementById("currentUser").textContent = user;
+  }
+}
+
+// スタートボタン時に確認
+document.getElementById('startBtn').addEventListener('click', () => {
+  const user = localStorage.getItem("quizUser");
+  if (!user) {
+    alert("先にログインしてください");
+    return;
+  }
+  const selectedMode = document.querySelector('input[name="mode"]:checked').value;
+  window.location.href = `game2.html?mode=${selectedMode}&user=${encodeURIComponent(user)}`;
+});
+
+window.onload = () => {
+  fetchRanking();
+  updateLoginUI();
+};
+
+
+
 
     window.onload = fetchRanking;
   </script>
