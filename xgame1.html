@@ -292,6 +292,8 @@
     timeDisplay.textContent = `残り時間: ${timeLeft} 秒`;
 
     renderQuestion();
+    document.getElementById("staff").innerHTML = "";  // ← SVGを毎回クリア
+
     startTimer();
   </script>
 </body>
