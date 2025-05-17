@@ -146,7 +146,7 @@
     const wrongSound = document.getElementById("wrongSound");
     const backBtn = document.getElementById("backBtn");
 
-    function sendScore(name, score) {
+     function sendScore(name, score) {
       fetch("https://script.google.com/macros/s/AKfycbxyi4i_aTZzzQn4Sw5e9EZMizBNmT54dlEYogeicB9SUQbKUbnKfjmPmbRhzxOE0CXo/exec", {
             method: "POST",
             body: JSON.stringify({ name: name, score: score }),
@@ -164,7 +164,7 @@
         console.error("送信エラー:", error);
         alert("スコア送信に失敗しました。");
       });
-    }
+    } 
 
     
     function getSemitone(note) {
@@ -334,12 +334,12 @@ function endGame() {
   document.getElementById("checkBtn").disabled = true;
   document.getElementById("numberSelect").disabled = true;
   document.getElementById("qualitySelect").disabled = true;
-  const playerName = prompt("ニックネームを入力してください！(ランキング):");
-  if (playerName) {
-    sendScore(playerName, score); // スコア送信
-  } else {
-    alert("名前が入力されなかったため、スコアは送信されませんでした。");
-  }
+  //const playerName = prompt("ニックネームを入力してください！(ランキング):");
+  //if (playerName) {
+  //  sendScore(playerName, score); // スコア送信
+  //} else {
+  //  alert("名前が入力されなかったため、スコアは送信されませんでした。");
+ // }
 }
 
 backBtn.addEventListener("click", () => {
