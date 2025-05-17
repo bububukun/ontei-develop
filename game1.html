@@ -128,6 +128,8 @@
     let gameActive = true;
 
     function renderQuestion() {
+      document.getElementById("staff").innerHTML = "";  // ← SVGを毎回クリア
+
       const renderer = new Renderer(document.getElementById("staff"), Renderer.Backends.SVG);
       renderer.resize(300, 150);
       const context = renderer.getContext();
@@ -292,8 +294,6 @@
     timeDisplay.textContent = `残り時間: ${timeLeft} 秒`;
 
     renderQuestion();
-    document.getElementById("staff").innerHTML = "";  // ← SVGを毎回クリア
-
     startTimer();
   </script>
 </body>
