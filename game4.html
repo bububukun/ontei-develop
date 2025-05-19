@@ -101,6 +101,7 @@
       </select>
     </label>
 
+    <img id="rankImage" src="" alt="ランク画像" style="max-width: 200px; margin-top: 1em;">
 
     <button id="checkBtn">解答</button>
   </div>
@@ -175,6 +176,35 @@ const bassNotes = [
         alert("スコア送信に失敗しました。");
       });
     } 
+
+    function updateRankImage(score) {
+  const image = document.getElementById("rankImage");
+
+  const thresholds = [
+    { score: 0, src: "rank0.png" },
+    { score: 200, src: "rank1.png" },
+    { score: 400, src: "rank2.png" },
+    { score: 600, src: "rank3.png" },
+    { score: 800, src: "rank4.png" },
+    { score: 1000, src: "rank5.png" },
+    { score: 1200, src: "rank6.png" },
+    { score: 1400, src: "rank7.png" },
+    { score: 1600, src: "rank8.png" },
+    { score: 1800, src: "rank9.png" },
+    { score: 2000, src: "rank10.png" },
+    { score: 2200, src: "rank11.png" },
+    { score: 2400, src: "rank12.png" },
+  ];
+
+  let selected = thresholds[0].src;
+  for (const t of thresholds) {
+    if (score >= t.score) selected = t.src;
+    else break;
+  }
+
+  image.src = selected;
+}
+
 
     
     function getSemitone(note) {
@@ -385,6 +415,7 @@ function endGame() {
   document.getElementById("checkBtn").disabled = true;
   document.getElementById("numberSelect").disabled = true;
   document.getElementById("qualitySelect").disabled = true;
+  updateRankImage(score);
   //const playerName = prompt("ニックネームを入力してください！(ランキング):");
   //if (playerName) {
   //  sendScore(playerName, score); // スコア送信
