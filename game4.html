@@ -298,7 +298,7 @@ function pickNotes() {
       ];
 
       if (note1.accidental) staveNotes[0].addAccidental(0, new Accidental(note1.accidental));
-      if (note2.accidental) staveNotes[1].addAccidental(0, new Accidental(note2.accidental));
+      if (note2.accidental) staveNotes[0].addAccidental(0, new Accidental(note2.accidental));
 
       Formatter.FormatAndDraw(context, stave, staveNotes);
     }
