@@ -416,12 +416,13 @@ function endGame() {
   document.getElementById("numberSelect").disabled = true;
   document.getElementById("qualitySelect").disabled = true;
   updateRankImage(score);
-  //const playerName = prompt("ニックネームを入力してください！(ランキング):");
-  //if (playerName) {
-  //  sendScore(playerName, score); // スコア送信
-  //} else {
-  //  alert("名前が入力されなかったため、スコアは送信されませんでした。");
- // }
+  
+const playerName = prompt("ニックネームを入力してください！(ランキング):");
+   if (playerName) {
+   sendScore(playerName, score); // スコア送信
+  } else {
+    alert("名前が入力されなかったため、スコアは送信されませんでした。");
+  }
 }
 
 backBtn.addEventListener("click", () => {
